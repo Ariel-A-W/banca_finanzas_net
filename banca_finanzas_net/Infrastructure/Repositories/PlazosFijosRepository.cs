@@ -25,12 +25,12 @@ public class PlazosFijosRepository : ICRUD<PlazoFijo>
 
     public PlazoFijo GetById(int value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Plazofijo_Id == value)!;
     }
 
     public PlazoFijo GetByUUID(Guid value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Plazofijo_UUID == value)!;
     }
 
     public Task<int> Add(PlazoFijo entity, CancellationToken cancellationToken)

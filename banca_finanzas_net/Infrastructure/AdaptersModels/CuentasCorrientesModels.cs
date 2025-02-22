@@ -1,5 +1,4 @@
-﻿using banca_finanzas_net.Domain.Abstractions;
-using banca_finanzas_net.Domain.CuentasCorrientes;
+﻿using banca_finanzas_net.Domain.CuentasCorrientes;
 using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -17,6 +16,7 @@ public class CuentasCorrientesModels : IEntityTypeConfiguration<CuentaCorriente>
             .HasName("cuenta_corriente_id");
 
         builder.Property(p => p.Cuenta_Corriente_UUID);
+        builder.Property(p => p.Cliente_Id);
         builder.Property(p => p.Estado);
         builder.Property(p => p.Fecha_Emision);
         builder.Property(p => p.Fecha_Cobro);

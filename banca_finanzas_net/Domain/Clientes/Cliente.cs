@@ -1,11 +1,13 @@
-﻿using banca_finanzas_net.Domain.PlazosFijos;
-using banca_finanzas_net.Domain.CajaAhorros;
+﻿using banca_finanzas_net.Domain.CajaAhorros;
 using banca_finanzas_net.Domain.CuentasCorrientes;
+using banca_finanzas_net.Domain.PlazosFijos;
+using System.ComponentModel.DataAnnotations;
 
 namespace banca_finanzas_net.Domain.Clientes;
 
 public class Cliente
 {
+    [Key]
     public int Cliente_Id { get; set; }
     public Guid Cliente_UUID { get; set; } 
     public string? Nombres { get; set; }

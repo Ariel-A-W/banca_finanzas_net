@@ -12,7 +12,7 @@ public class ClientesResponse
     public string? Email { get; set; }
     public int Active { get; set; }
 
-    public CajaAhorrosResponse? Clientes { get; set; }
+    public IEnumerable<CajaAhorrosResponse>? CajaAhorros { get; set; }
     public CuentaCorrienteResponse? CuentasCorrientes { get; set; }
     public PlazosFijosResponse? PlazosFijos { get; set; }
 }

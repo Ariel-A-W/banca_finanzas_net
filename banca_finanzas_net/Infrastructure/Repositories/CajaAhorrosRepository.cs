@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace banca_finanzas_net.Infrastructure.Repositories;
 
-public class CajaAhorrosRepository : ICRUD<CajaAhorro>
+public class CajaAhorrosRepository : ICRUD<CajaAhorro>, ICajaAhorro
 {
     private readonly AppDBContext _dbContext;
     private readonly IUnitOfWork _unitOfWork;
@@ -23,14 +23,19 @@ public class CajaAhorrosRepository : ICRUD<CajaAhorro>
         return _dbSet!.ToList();
     }
 
+    public IEnumerable<CajaAhorro> GetClientesMovsByID(int clienteId)
+    {
+        return _dbSet!.ToList().Where(x => x.Cliente_Id == clienteId);
+    }
+
     public CajaAhorro GetById(int value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Caja_Ahorro_Id == value)!;
     }
 
     public CajaAhorro GetByUUID(Guid value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Caja_Ahorro_UUID == value)!; 
     }
 
     public Task<int> Add(CajaAhorro entity, CancellationToken cancellationToken)

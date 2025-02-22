@@ -5,5 +5,5 @@ public record Capital(
 )
 {
     // (Monto x TNA % x Cantidad de días)/(365 x 100).
-    public decimal GetCapital() => (Monto * Interes * Plazo) / 365000; 
+    public decimal GetCapital() => Monto + ((Monto * (Interes * 12) * Plazo) / 36500); 
 }

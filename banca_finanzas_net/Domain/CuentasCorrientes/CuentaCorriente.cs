@@ -1,12 +1,15 @@
 ﻿using banca_finanzas_net.Domain.Abstractions;
 using banca_finanzas_net.Domain.Clientes;
+using System.ComponentModel.DataAnnotations;
 
 namespace banca_finanzas_net.Domain.CuentasCorrientes;
 
 public class CuentaCorriente
 {
+    [Key]
     public int Cuenta_Corriente_Id { get; set; }
     public Guid Cuenta_Corriente_UUID { get; set; }
+    public int Cliente_Id { get; set; }
     public string? Estado { get; set; }
     public DateTime Fecha_Emision { get; set; }
     public DateTime Fecha_Cobro { get; set; }

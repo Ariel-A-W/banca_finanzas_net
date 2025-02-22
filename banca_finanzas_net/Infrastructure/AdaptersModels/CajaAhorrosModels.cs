@@ -1,5 +1,4 @@
-﻿using banca_finanzas_net.Domain.Abstractions;
-using banca_finanzas_net.Domain.CajaAhorros;
+﻿using banca_finanzas_net.Domain.CajaAhorros;
 using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -22,11 +21,13 @@ public class CajaAhorrosModels : IEntityTypeConfiguration<CajaAhorro>
         builder.Property(p => p.Debe);
         builder.Property(p => p.Haber);
 
-        builder
-            .Property(p => p.Saldo!)
-            .HasConversion(
-                v => $"{v.Debe}|{v.Haber}",   
-                o => StandardConversions.ConvertToSaldo(o)
-            );
+        //builder
+        //    .Property(p => p.Saldo!)
+        //    .HasConversion(
+        //        v => $"{v.Debe}|{v.Haber}",   
+        //        o => StandardConversions.ConvertToSaldo(o)
+        //    );
+
+        builder.Property(p => p.Fecha);
     }
 }

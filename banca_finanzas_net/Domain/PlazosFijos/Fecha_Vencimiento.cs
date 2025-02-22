@@ -1,8 +1,8 @@
 ﻿namespace banca_finanzas_net.Domain.PlazosFijos;
 
 public record Fecha_Vencimiento(
-    int Value    
+    DateTime Fecha_Inicio, int Value    
 )
 {
-    public DateTime GetFechaVencimiento() => DateTime.Now.AddDays(Value);
+    public DateTime GetFechaVencimiento() => Fecha_Inicio.AddDays(Value);
 }

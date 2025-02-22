@@ -1,5 +1,4 @@
 ﻿using banca_finanzas_net.Domain.PlazosFijos;
-using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -19,25 +18,19 @@ public class PlazosFijosModels : IEntityTypeConfiguration<PlazoFijo>
         builder.Property(p => p.Nrocuenta);
         builder.Property(p => p.Cliente_Id);
         builder.Property(p => p.Monto);
-        
+
         builder.Property(p => p.Plazo)
-            .HasConversion(v => v!.Value, v => new Plazo(v));
-        
+            .HasConversion(v => v!.Value, v => new Plazo(v))
+            .HasColumnType("int8");
+
         builder.Property(p => p.Interes);
-        
-        builder
-            .Property(p => p.Capital)
-            .HasConversion(                                
-               v => $"{v.Monto}|{v.Plazo}|{v.Interes}", 
-               o => StandardConversions.ConvertToCapital(o)
-            );
+
+        // Capital (No Mapeado)
 
         builder.Property(p => p.Fecha_Inicio);
 
-        builder
-            .Property(p => p.Fecha_Vencimiento)
-            .HasConversion(v => v!.Value, v => new Fecha_Vencimiento(v));        
-        
+        // Fecha_Vencimiento No Mapeado
+
         builder.Property(p => p.Active);
     }
 }

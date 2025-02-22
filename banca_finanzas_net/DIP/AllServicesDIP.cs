@@ -1,7 +1,10 @@
 ﻿using banca_finanzas_net.Application.Abstractions;
 using banca_finanzas_net.Application.Clientes;
 using banca_finanzas_net.Domain.Abstractions;
+using banca_finanzas_net.Domain.CajaAhorros;
 using banca_finanzas_net.Domain.Clientes;
+using banca_finanzas_net.Domain.CuentasCorrientes;
+using banca_finanzas_net.Domain.PlazosFijos;
 using banca_finanzas_net.Infrastructure.DBContext;
 using banca_finanzas_net.Infrastructure.Repositories;
 
@@ -31,7 +34,13 @@ public static class AllServicesDIP
             ClientesUpdateRequest
         >, ClientesUseCase>();
 
+        services.AddScoped<ICRUD<CajaAhorro>, CajaAhorrosRepository>();
+        services.AddScoped<ICajaAhorro, CajaAhorrosRepository>();
 
+        services.AddScoped<ICRUD<CuentaCorriente>, CuentasCorrientesRepository>();
+        services.AddScoped<ICuentaCorriente, CuentasCorrientesRepository>();
+
+        services.AddScoped<ICRUD<PlazoFijo>, PlazosFijosRepository>();
 
         return services;
     }

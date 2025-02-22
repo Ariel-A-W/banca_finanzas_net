@@ -35,4 +35,17 @@ public class ClientesController : ControllerBase
 
         return Ok(clientes);
     }
+
+    [HttpGet("getcliente")]
+    public ActionResult<ClientesResponse> GetCliente(
+        [FromQuery] ClientesByUUIDRequest entity
+    )
+    {
+        var cliente = _clientes.GetByUUID(entity.Cliente_UUID);
+
+        if (cliente == null)
+            return NotFound(MessagesStatusCodes.NotFoundMessage);
+
+        return Ok(cliente);
+    }
 }

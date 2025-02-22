@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace banca_finanzas_net.Infrastructure.Repositories;
 
-public class CuentasCorrientesRepository : ICRUD<CuentaCorriente>
+public class CuentasCorrientesRepository : ICRUD<CuentaCorriente>, ICuentaCorriente
 {
     private readonly AppDBContext _dbContext;
     private readonly IUnitOfWork _unitOfWork;
@@ -23,14 +23,19 @@ public class CuentasCorrientesRepository : ICRUD<CuentaCorriente>
         return _dbSet!.ToList();
     }
 
+    public IEnumerable<CuentaCorriente> GetClienteMovsByID(int clienteId)
+    {
+        return _dbSet!.ToList().Where(x => x.Cliente_Id == clienteId);
+    }
+
     public CuentaCorriente GetById(int value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Cuenta_Corriente_Id == value)!;
     }
 
     public CuentaCorriente GetByUUID(Guid value)
     {
-        throw new NotImplementedException();
+        return _dbSet.SingleOrDefault(x => x.Cuenta_Corriente_UUID == value)!;
     }
 
     public Task<int> Add(CuentaCorriente entity, CancellationToken cancellationToken)

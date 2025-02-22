@@ -36,7 +36,7 @@ public static class StandardConversions
 
         var parts = values.Split('|'); 
 
-        if (parts.Length != 2)
+        if (parts.Length != 3)
             throw new InvalidOperationException(
                 "El valor almacenado no tiene el formato correcto."
             );

@@ -12,6 +12,4 @@ public class CuentaCorrienteResponse
     public decimal Haber { get; set; }
     public decimal Saldo { get; set; }
     public int Active { get; set; }
-
-    public ClientesResponse? Clientes { get; set; }
 }
