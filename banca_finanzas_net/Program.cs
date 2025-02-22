@@ -1,10 +1,13 @@
-using banca_finanzas_net.Domain.Abstractions;
-using banca_finanzas_net.Domain.Clientes;
-using banca_finanzas_net.Infrastructure.Repositories;
+using banca_finanzas_net.DIP;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+
+// ***************************************************************************************
+// Conexión hacia la base de datos.
+builder.Services.AddPostgreSQLConnection(builder.Configuration);
+// ***************************************************************************************
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -12,8 +15,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // ******************************************************************************************
-// *** Dependency Injection *****************************************************************
-builder.Services.AddScoped<ICRUD<Cliente>, ClientesRepository>();
+// *** All Services Dependency Injection ****************************************************
+builder.Services.AddServicesDIP(builder.Configuration);
 // ******************************************************************************************
 
 var app = builder.Build();

@@ -1,5 +1,6 @@
 ﻿using banca_finanzas_net.Domain.Abstractions;
 using banca_finanzas_net.Domain.Clientes;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace banca_finanzas_net.Domain.CajaAhorros;
 

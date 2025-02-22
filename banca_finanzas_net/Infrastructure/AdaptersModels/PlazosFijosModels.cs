@@ -1,4 +1,5 @@
 ﻿using banca_finanzas_net.Domain.PlazosFijos;
+using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -8,11 +9,11 @@ public class PlazosFijosModels : IEntityTypeConfiguration<PlazoFijo>
 {
     public void Configure(EntityTypeBuilder<PlazoFijo> builder)
     {
-        builder.ToTable("PlazosFijos");
+        builder.ToTable("plazosfijos");
 
         builder
             .HasKey(k => k.Plazofijo_Id)
-            .HasName("Plazofijo_Id");
+            .HasName("plazofijo_id");
 
         builder.Property(p => p.Plazofijo_UUID);
         builder.Property(p => p.Nrocuenta);
@@ -27,18 +28,8 @@ public class PlazosFijosModels : IEntityTypeConfiguration<PlazoFijo>
         builder
             .Property(p => p.Capital)
             .HasConversion(                                
-                v => new Capital(v!.Monto, v!.Plazo, v!.Interes),
-                v => new Capital(v.Monto, v.Plazo, v.Interes)
-                //v => $"{v!.Monto};{v!.Plazo};{v!.Interes}",
-                //v => 
-                //{
-                //    var valores = v.Split(';');
-                //    return new Capital(
-                //        decimal.Parse(valores[0]),
-                //        int.Parse(valores[1]),
-                //        decimal.Parse(valores[2])
-                //    );
-                //}
+               v => $"{v.Monto}|{v.Plazo}|{v.Interes}", 
+               o => StandardConversions.ConvertToCapital(o)
             );
 
         builder.Property(p => p.Fecha_Inicio);

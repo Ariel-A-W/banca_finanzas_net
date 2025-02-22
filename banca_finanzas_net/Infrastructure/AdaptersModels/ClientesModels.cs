@@ -8,11 +8,11 @@ public class ClientesModels : IEntityTypeConfiguration<Cliente>
 {
     public void Configure(EntityTypeBuilder<Cliente> builder)
     {
-        builder.ToTable("Clientes");
+        builder.ToTable("clientes");
 
         builder
             .HasKey(k => k.Cliente_Id)
-            .HasName("Clientes_Id");
+            .HasName("clientes_id");
 
         builder
             .HasOne(o => o.CajaAhorros)

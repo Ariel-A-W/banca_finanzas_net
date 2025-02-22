@@ -5,9 +5,9 @@ public interface ICRUDUsesCases
         TResponse, TRequestAdd, TRequestDelete, TRequestUpdate
     >
     where TResponse : class 
-    where TRequestAdd : TResponse
-    where TRequestDelete : TResponse
-    where TRequestUpdate : TResponse
+    where TRequestAdd : class
+    where TRequestDelete : class
+    where TRequestUpdate : class
 {
     public IEnumerable<TResponse> GetAll();
     public TResponse GetByIb(int id);
