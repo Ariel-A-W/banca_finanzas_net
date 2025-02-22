@@ -1,0 +1,6 @@
+@banca_finanzas_net_HostAddress = http://localhost:5058
+
+GET {{banca_finanzas_net_HostAddress}}/banconet/
+Accept: application/json
+
+###
