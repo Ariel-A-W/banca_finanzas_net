@@ -2,5 +2,5 @@
 
 public interface ICajaAhorro
 {
-    public IEnumerable<CajaAhorro> GetClientesMovsByID(int clienteId);
+    public IEnumerable<CajaAhorro> GetClienteMovsByID(int clienteId);
 }

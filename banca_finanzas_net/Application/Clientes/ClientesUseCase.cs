@@ -1,5 +1,6 @@
 ﻿using banca_finanzas_net.Application.Abstractions;
 using banca_finanzas_net.Application.CajaAhorros;
+using banca_finanzas_net.Application.CuentasCorrientes;
 using banca_finanzas_net.Domain.Abstractions;
 using banca_finanzas_net.Domain.CajaAhorros;
 using banca_finanzas_net.Domain.Clientes;
@@ -43,9 +44,7 @@ public class ClientesUseCase : ICRUDUsesCases
     public IEnumerable<ClientesResponse> GetAll()
     {
         var lstClientes = new List<ClientesResponse>();        
-        var clientes = _cliente.GetList();        
-
-        var cuentaCorriente = new CuentaCorriente();
+        var clientes = _cliente.GetList(); 
         var plazoFijo = new PlazoFijo();
 
         if (clientes == null)
@@ -57,11 +56,11 @@ public class ClientesUseCase : ICRUDUsesCases
             // *** Caja de Ahorro 
             // *******************************************************************************
             var lstCajaAhorro = new List<CajaAhorrosResponse>();
-            var cajaAhorro = _cajaAhorroCliente.GetClientesMovsByID(cliente.Cliente_Id);
+            var cajaAhorro = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id);
             if (cajaAhorro != null)
             {
-                var debe = _cajaAhorroCliente.GetClientesMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
-                var haber = _cajaAhorroCliente.GetClientesMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
+                var debe = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
+                var haber = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
                 var saldo = debe - haber;
 
                 foreach (CajaAhorro caja in cajaAhorro)
@@ -87,7 +86,35 @@ public class ClientesUseCase : ICRUDUsesCases
             // *******************************************************************************
             // *** Cuenta Corriente
             // *******************************************************************************
+            var lstCuentaCorriente = new List<CuentaCorrienteResponse>();
+            var cuentaCorriente = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id);
+            if (cuentaCorriente != null)
+            {
+                var debe = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
+                var haber = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
+                var saldo = debe - haber;
 
+                foreach (CuentaCorriente cc in cuentaCorriente)
+                {
+                    lstCuentaCorriente.Add(
+                        new CuentaCorrienteResponse()
+                        { 
+                            Cuenta_Corriente_UUIG = cc.Cuenta_Corriente_UUID, 
+                            Estadp = cc.Estado, 
+                            Fecha_Emision = cc.Fecha_Emision, 
+                            Fecha_Cobro = cc.Fecha_Cobro, 
+                            Debe = cc.Debe, 
+                            Haber = cc.Haber, 
+                            Saldo = saldo, 
+                            Active = cc.Active
+                        }
+                    );
+                }
+            }
+            else
+            {
+                cuentaCorriente = null;
+            }
             // *******************************************************************************
 
             // *******************************************************************************
@@ -104,7 +131,7 @@ public class ClientesUseCase : ICRUDUsesCases
                     Email = cliente.Email, 
                     Active = cliente.Active, 
                     CajaAhorros = lstCajaAhorro, 
-                    CuentasCorrientes = null, 
+                    CuentasCorrientes = lstCuentaCorriente, 
                     PlazosFijos = plazoFijo != null ? new PlazosFijos.PlazosFijosResponse() 
                     {                         
                         Plazofijo_UUID = plazoFijo!.Plazofijo_UUID, 

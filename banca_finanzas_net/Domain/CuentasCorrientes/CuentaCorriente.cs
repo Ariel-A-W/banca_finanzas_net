@@ -1,6 +1,7 @@
 ﻿using banca_finanzas_net.Domain.Abstractions;
 using banca_finanzas_net.Domain.Clientes;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace banca_finanzas_net.Domain.CuentasCorrientes;
 
@@ -15,6 +16,8 @@ public class CuentaCorriente
     public DateTime Fecha_Cobro { get; set; }
     public decimal Debe { get; set; }
     public decimal Haber { get; set; }
+
+    [NotMapped]
     public Saldo? Saldo { get; set; }
 
     public int Active { get; set; }

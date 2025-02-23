@@ -23,7 +23,7 @@ public class CajaAhorrosRepository : ICRUD<CajaAhorro>, ICajaAhorro
         return _dbSet!.ToList();
     }
 
-    public IEnumerable<CajaAhorro> GetClientesMovsByID(int clienteId)
+    public IEnumerable<CajaAhorro> GetClienteMovsByID(int clienteId)
     {
         return _dbSet!.ToList().Where(x => x.Cliente_Id == clienteId);
     }
