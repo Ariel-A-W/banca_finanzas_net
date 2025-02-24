@@ -14,5 +14,5 @@ public class ClientesResponse
 
     public IEnumerable<CajaAhorrosResponse>? CajaAhorros { get; set; }
     public IEnumerable<CuentaCorrienteResponse>? CuentasCorrientes { get; set; }
-    public PlazosFijosResponse? PlazosFijos { get; set; }
+    public IEnumerable<PlazosFijosResponse>? PlazosFijos { get; set; }
 }

@@ -1,6 +1,7 @@
 ﻿using banca_finanzas_net.Application.Abstractions;
 using banca_finanzas_net.Application.CajaAhorros;
 using banca_finanzas_net.Application.CuentasCorrientes;
+using banca_finanzas_net.Application.PlazosFijos;
 using banca_finanzas_net.Domain.Abstractions;
 using banca_finanzas_net.Domain.CajaAhorros;
 using banca_finanzas_net.Domain.Clientes;
@@ -45,7 +46,6 @@ public class ClientesUseCase : ICRUDUsesCases
     {
         var lstClientes = new List<ClientesResponse>();        
         var clientes = _cliente.GetList(); 
-        var plazoFijo = new PlazoFijo();
 
         if (clientes == null)
             return lstClientes;
@@ -53,102 +53,29 @@ public class ClientesUseCase : ICRUDUsesCases
         foreach (Cliente cliente in clientes)
         {
             // *******************************************************************************
-            // *** Caja de Ahorro 
-            // *******************************************************************************
-            var lstCajaAhorro = new List<CajaAhorrosResponse>();
-            var cajaAhorro = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id);
-            if (cajaAhorro != null)
-            {
-                var debe = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
-                var haber = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
-                var saldo = debe - haber;
-
-                foreach (CajaAhorro caja in cajaAhorro)
-                {
-                    lstCajaAhorro.Add(
-                        new CajaAhorrosResponse()
-                        {
-                            Caja_Ahorro_UUID = caja.Caja_Ahorro_UUID,
-                            Movimiento = caja.Movimiento,
-                            Debe = caja.Debe,
-                            Haber = caja.Haber,
-                            Saldo = saldo
-                        }
-                    );
-                }
-            }
-            else 
-            {
-                cajaAhorro = null; 
-            }
-            // *******************************************************************************
-
+            // *** Caja de Ahorro
+            var lstCajaAhorro = GetClienteMovsCajaAhorro(cliente);
             // *******************************************************************************
             // *** Cuenta Corriente
+            var lstCuentaCorriente = GetClienteMovsCuentaCorriente(cliente);
             // *******************************************************************************
-            var lstCuentaCorriente = new List<CuentaCorrienteResponse>();
-            var cuentaCorriente = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id);
-            if (cuentaCorriente != null)
-            {
-                var debe = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
-                var haber = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
-                var saldo = debe - haber;
-
-                foreach (CuentaCorriente cc in cuentaCorriente)
-                {
-                    lstCuentaCorriente.Add(
-                        new CuentaCorrienteResponse()
-                        { 
-                            Cuenta_Corriente_UUIG = cc.Cuenta_Corriente_UUID, 
-                            Estadp = cc.Estado, 
-                            Fecha_Emision = cc.Fecha_Emision, 
-                            Fecha_Cobro = cc.Fecha_Cobro, 
-                            Debe = cc.Debe, 
-                            Haber = cc.Haber, 
-                            Saldo = saldo, 
-                            Active = cc.Active
-                        }
-                    );
-                }
-            }
-            else
-            {
-                cuentaCorriente = null;
-            }
+            // *** Plazo Fijo 
+            var lstPlazoFijo = GetClienteMovsPlazoFijo(cliente);
             // *******************************************************************************
-
-            // *******************************************************************************
-            // *** Plazo Fijo
-            plazoFijo = _plazoFijo.GetList().SingleOrDefault(x => x.Cliente_Id == cliente.Cliente_Id);
-            // *******************************************************************************
-
             lstClientes.Add(
                 new ClientesResponse()
-                { 
-                    Cliente_UUID = cliente.Cliente_UUID, 
-                    Nombres = cliente.Nombres, 
-                    Apellidos = cliente.Apellidos, 
-                    Email = cliente.Email, 
-                    Active = cliente.Active, 
-                    CajaAhorros = lstCajaAhorro, 
-                    CuentasCorrientes = lstCuentaCorriente, 
-                    PlazosFijos = plazoFijo != null ? new PlazosFijos.PlazosFijosResponse() 
-                    {                         
-                        Plazofijo_UUID = plazoFijo!.Plazofijo_UUID, 
-                        Nrocuenta = plazoFijo.Nrocuenta, 
-                        Monto = plazoFijo.Monto, 
-                        Plazo = plazoFijo.Plazo!.GetPlazo(), 
-                        Interes = plazoFijo.Interes,
-                        TNA = plazoFijo.Interes * 12, // TNA %
-                        Capital = plazoFijo.Capital!.GetCapital(), 
-                        Fecha_Inicio = plazoFijo.Fecha_Inicio, 
-                        Fecha_Vencimiento = plazoFijo.Fecha_Vencimiento!.GetFechaVencimiento(), 
-                        Active = plazoFijo.Active 
-                    } : null                     
+                {
+                    Cliente_UUID = cliente.Cliente_UUID,
+                    Nombres = cliente.Nombres,
+                    Apellidos = cliente.Apellidos,
+                    Email = cliente.Email,
+                    Active = cliente.Active,
+                    CajaAhorros = lstCajaAhorro,
+                    CuentasCorrientes = lstCuentaCorriente,
+                    PlazosFijos = lstPlazoFijo
                 }
-            );            
+            );
         }
-        
         return lstClientes;
     }
 
@@ -175,5 +102,123 @@ public class ClientesUseCase : ICRUDUsesCases
     public Task<int> Update(ClientesUpdateRequest entity, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
+    }
+
+    private List<PlazosFijosResponse> GetClienteMovsPlazoFijo(Cliente cliente)
+    {
+        var plazoFijo = _plazoFijo
+            .GetList()
+            .SingleOrDefault(x => x.Cliente_Id == cliente.Cliente_Id);
+        // ******************************************************************************* 
+
+        var lstPlazoFijo = new List<PlazosFijosResponse>();
+
+        if (plazoFijo != null)
+        {
+            lstPlazoFijo.Add(
+                new PlazosFijosResponse()
+                {
+                    Plazofijo_UUID = plazoFijo!.Plazofijo_UUID,
+                    Nrocuenta = plazoFijo.Nrocuenta,
+                    Monto = plazoFijo.Monto,
+                    Plazo = plazoFijo.Plazo!.GetPlazo(),
+                    Interes = plazoFijo.Interes,
+                    TNA = plazoFijo.Interes * 12, // TNA %
+                    Capital = plazoFijo.Capital!.GetCapital(),
+                    Fecha_Inicio = plazoFijo.Fecha_Inicio,
+                    Fecha_Vencimiento = plazoFijo.Fecha_Vencimiento!.GetFechaVencimiento(),
+                    Active = plazoFijo.Active
+                }
+            );
+        }
+        else
+        {
+            plazoFijo = null;
+        }
+
+        return lstPlazoFijo;
+    }
+
+    private List<CajaAhorrosResponse> GetClienteMovsCajaAhorro(Cliente cliente)
+    {
+        // *******************************************************************************
+        // *** Caja de Ahorro 
+        // *******************************************************************************
+        var lstCajaAhorro = new List<CajaAhorrosResponse>();
+        var cajaAhorro = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id);
+        if (cajaAhorro != null)
+        {
+            //var debe = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Debe);
+            //var haber = _cajaAhorroCliente.GetClienteMovsByID(cliente.Cliente_Id).Sum(x => x.Haber);
+            //var saldo = debe - haber;
+
+            decimal debe = 0;
+            decimal haber = 0;
+
+            foreach (CajaAhorro caja in cajaAhorro)
+            {
+                debe += caja.Debe;
+                haber += caja.Haber;
+                decimal saldo = debe - haber;
+
+                lstCajaAhorro.Add(
+                    new CajaAhorrosResponse()
+                    {
+                        Caja_Ahorro_UUID = caja.Caja_Ahorro_UUID,
+                        Movimiento = caja.Movimiento,
+                        Debe = caja.Debe,
+                        Haber = caja.Haber,
+                        Saldo = saldo
+                    }
+                );
+            }
+        }
+        else
+        {
+            cajaAhorro = null;
+        }
+        // *******************************************************************************
+        return lstCajaAhorro;
+    }
+
+    private List<CuentaCorrienteResponse> GetClienteMovsCuentaCorriente(Cliente cliente)
+    {
+        // *******************************************************************************
+        // *** Cuenta Corriente
+        // *******************************************************************************
+        var lstCuentaCorriente = new List<CuentaCorrienteResponse>();
+        var cuentaCorriente = _cuentaCorrienteCliente.GetClienteMovsByID(cliente.Cliente_Id);
+        if (cuentaCorriente != null)
+        {
+            decimal debe = 0;
+            decimal haber = 0;
+
+            foreach (CuentaCorriente cc in cuentaCorriente)
+            {
+                debe += cc.Debe;
+                haber += cc.Haber;
+                decimal saldo = debe - haber;
+
+                lstCuentaCorriente.Add(
+                    new CuentaCorrienteResponse()
+                    {
+                        Cuenta_Corriente_UUIG = cc.Cuenta_Corriente_UUID,
+                        Estadp = cc.Estado,
+                        Fecha_Emision = cc.Fecha_Emision,
+                        Fecha_Cobro = cc.Fecha_Cobro,
+                        Debe = cc.Debe,
+                        Haber = cc.Haber,
+                        Saldo = saldo,
+                        Active = cc.Active
+                    }
+                );
+            }
+        }
+        else
+        {
+            cuentaCorriente = null;
+        }
+        // *******************************************************************************
+        return lstCuentaCorriente;
     }
 }
