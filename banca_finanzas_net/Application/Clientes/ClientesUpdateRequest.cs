@@ -26,4 +26,8 @@ public class ClientesUpdateRequest
     [Required(ErrorMessage = "El campo {0} es requerido.")]
     [StringLength(255, ErrorMessage = "{0} no puede superar los 255 caracteres.")]
     public string? Telefono { get; set; }
+
+    [Required(ErrorMessage = "El campo {0} es requerido.")]
+    [Range(0, 1, ErrorMessage = "El campo {0} requiere valores entre 0 y 1")]
+    public int Active { get; set; }
 }

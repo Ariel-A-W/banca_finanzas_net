@@ -40,16 +40,74 @@ public class CajaAhorrosRepository : ICRUD<CajaAhorro>, ICajaAhorro
 
     public Task<int> Add(CajaAhorro entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _dbSet.Add(
+                new CajaAhorro() 
+                { 
+                    Caja_Ahorro_Id = entity.Caja_Ahorro_Id, 
+                    Caja_Ahorro_UUID = entity.Caja_Ahorro_UUID, 
+                    Cliente_Id = entity.Cliente_Id, 
+                    Movimiento = entity.Movimiento, 
+                    Debe = entity.Debe, 
+                    Haber = entity.Haber, 
+                    Saldo = entity.Saldo, 
+                    Fecha = entity.Fecha
+                }    
+            );
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult(result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Delete(int value, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var cajaAhorro = _dbSet.FirstOrDefault(x => x.Caja_Ahorro_Id == value);
+
+            if (cajaAhorro == null)
+                return Task<int>.FromResult(0);
+
+            _dbSet.Remove(cajaAhorro);
+
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Update(CajaAhorro entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var cajaAhorro = _dbSet.FirstOrDefault(x => x.Caja_Ahorro_Id == entity.Caja_Ahorro_Id);
+
+            if (cajaAhorro == null)
+                return Task<int>.FromResult(0);
+
+            cajaAhorro.Caja_Ahorro_Id = entity.Caja_Ahorro_Id;
+            cajaAhorro.Caja_Ahorro_UUID = entity.Caja_Ahorro_UUID;
+            cajaAhorro.Cliente_Id = entity.Cliente_Id;
+            cajaAhorro.Movimiento = entity.Movimiento;
+            cajaAhorro.Debe = entity.Debe;
+            cajaAhorro.Haber = entity.Haber;
+            cajaAhorro.Saldo = entity.Saldo;
+            cajaAhorro.Fecha = entity.Fecha;
+
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 }

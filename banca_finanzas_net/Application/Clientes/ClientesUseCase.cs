@@ -91,17 +91,71 @@ public class ClientesUseCase : ICRUDUsesCases
 
     public Task<int> Add(ClientesAddRequest entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var newReg = new Cliente()
+            {
+                Cliente_Id = 0, 
+                Cliente_UUID = Guid.NewGuid(), 
+                Nombres = entity.Nombres, 
+                Apellidos = entity.Apellidos, 
+                Email = entity.Email, 
+                Telefono = entity.Telefono, 
+                Active = 1
+            };
+            var result = _cliente.Add(newReg, cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Delete(ClientesDeleteRequest entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var cliente = _cliente.GetByUUID(entity.Cliente_UUID);
+
+            if (cliente == null)
+                return Task<int>.FromResult(0);
+
+            var result = _cliente.Delete(cliente.Cliente_Id, cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Update(ClientesUpdateRequest entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var cliente = _cliente.GetByUUID(entity.Cliente_UUID);
+
+            if (cliente == null)
+                return Task<int>.FromResult(0);
+
+            var regUpdate = new Cliente() 
+            { 
+                Cliente_Id = cliente.Cliente_Id, 
+                Cliente_UUID = entity.Cliente_UUID, 
+                Nombres = entity.Nombres, 
+                Apellidos = entity.Apellidos, 
+                Email = entity.Email, 
+                Telefono = entity.Telefono, 
+                Active = entity.Active
+            };
+            var result = _cliente.Update(regUpdate, cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     private List<PlazosFijosResponse> GetClienteMovsPlazoFijo(Cliente cliente)
@@ -109,7 +163,6 @@ public class ClientesUseCase : ICRUDUsesCases
         var plazoFijo = _plazoFijo
             .GetList()
             .SingleOrDefault(x => x.Cliente_Id == cliente.Cliente_Id);
-        // ******************************************************************************* 
 
         var lstPlazoFijo = new List<PlazosFijosResponse>();
 

@@ -35,16 +35,77 @@ public class PlazosFijosRepository : ICRUD<PlazoFijo>
 
     public Task<int> Add(PlazoFijo entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            _dbSet.Add(
+                new PlazoFijo() 
+                { 
+                    Plazofijo_Id = entity.Plazofijo_Id, 
+                    Plazofijo_UUID = entity.Plazofijo_UUID, 
+                    Nrocuenta = entity.Nrocuenta, 
+                    Cliente_Id = entity.Cliente_Id, 
+                    Monto = entity.Monto, 
+                    Plazo = entity.Plazo, 
+                    Interes = entity.Interes, 
+                    Capital = entity.Capital, 
+                    Fecha_Inicio = entity.Fecha_Inicio, 
+                    Fecha_Vencimiento = entity.Fecha_Vencimiento, 
+                    Active = entity.Active
+                }    
+            );
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Delete(int value, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var plazoFijo = _dbSet.FirstOrDefault(x => x.Plazofijo_Id == value);
+
+            if (plazoFijo == null)
+                return Task<int>.FromResult(0);
+
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 
     public Task<int> Update(PlazoFijo entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var plazoFijo = _dbSet.FirstOrDefault(x => x.Plazofijo_Id == entity.Plazofijo_Id);
+
+            if (plazoFijo == null)
+                return Task<int>.FromResult(0);
+
+            plazoFijo.Plazofijo_Id = entity.Plazofijo_Id;
+            plazoFijo.Plazofijo_UUID = entity.Plazofijo_UUID;
+            plazoFijo.Nrocuenta = entity.Nrocuenta;
+            plazoFijo.Cliente_Id = entity.Cliente_Id;
+            plazoFijo.Monto = entity.Monto;
+            plazoFijo.Interes = entity.Interes;
+            plazoFijo.Capital = entity.Capital;
+            plazoFijo.Fecha_Inicio = entity.Fecha_Inicio;
+            plazoFijo.Fecha_Vencimiento = entity.Fecha_Vencimiento;
+            plazoFijo.Active = entity.Active;
+
+            var result = _unitOfWork.SaveChangesAsync(cancellationToken);
+            return Task<int>.FromResult((int)result.Result);
+        }
+        catch
+        {
+            return Task<int>.FromResult(0);
+        }
     }
 }
