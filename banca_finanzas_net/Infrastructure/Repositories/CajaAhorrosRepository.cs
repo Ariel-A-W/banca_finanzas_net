@@ -48,6 +48,7 @@ public class CajaAhorrosRepository : ICRUD<CajaAhorro>, ICajaAhorro
                     Caja_Ahorro_Id = entity.Caja_Ahorro_Id, 
                     Caja_Ahorro_UUID = entity.Caja_Ahorro_UUID, 
                     Cliente_Id = entity.Cliente_Id, 
+                    NroCuenta = entity.NroCuenta,
                     Movimiento = entity.Movimiento, 
                     Debe = entity.Debe, 
                     Haber = entity.Haber, 
@@ -96,6 +97,7 @@ public class CajaAhorrosRepository : ICRUD<CajaAhorro>, ICajaAhorro
             cajaAhorro.Caja_Ahorro_Id = entity.Caja_Ahorro_Id;
             cajaAhorro.Caja_Ahorro_UUID = entity.Caja_Ahorro_UUID;
             cajaAhorro.Cliente_Id = entity.Cliente_Id;
+            cajaAhorro.NroCuenta = entity.NroCuenta;
             cajaAhorro.Movimiento = entity.Movimiento;
             cajaAhorro.Debe = entity.Debe;
             cajaAhorro.Haber = entity.Haber;

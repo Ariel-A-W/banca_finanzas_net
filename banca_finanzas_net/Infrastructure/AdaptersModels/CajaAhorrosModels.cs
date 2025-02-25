@@ -1,5 +1,4 @@
 ﻿using banca_finanzas_net.Domain.CajaAhorros;
-using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -17,6 +16,7 @@ public class CajaAhorrosModels : IEntityTypeConfiguration<CajaAhorro>
 
         builder.Property(p => p.Caja_Ahorro_UUID);
         builder.Property(p => p.Cliente_Id);
+        builder.Property(p => p.NroCuenta);
         builder.Property(p => p.Movimiento);
         builder.Property(p => p.Debe);
         builder.Property(p => p.Haber);

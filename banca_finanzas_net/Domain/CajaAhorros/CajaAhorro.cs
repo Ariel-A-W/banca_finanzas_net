@@ -11,6 +11,7 @@ public class CajaAhorro
     public int Caja_Ahorro_Id { get; set; }
     public Guid Caja_Ahorro_UUID { get; set; }
     public int Cliente_Id { get; set; }
+    public string? NroCuenta { get; set; }
     public string? Movimiento { get; set; }
     public decimal Debe { get; set; }
     public decimal Haber { get; set; }
