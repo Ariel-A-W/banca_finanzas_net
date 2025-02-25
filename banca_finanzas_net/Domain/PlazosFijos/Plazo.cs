@@ -17,18 +17,7 @@ public record Plazo(int Value)
         }
         else
         {
-            if (Value >= 180)
-            {
-                return 180;
-            }
-            else if (Value <= 30)
-            {
-                return 30;
-            }
-            else
-            {
-                return 30;
-            }
+            return Value >= 180 ? 180 : 30;
         }
     }
 }

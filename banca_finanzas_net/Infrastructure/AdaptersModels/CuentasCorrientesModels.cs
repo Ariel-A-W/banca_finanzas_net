@@ -1,5 +1,4 @@
 ﻿using banca_finanzas_net.Domain.CuentasCorrientes;
-using banca_finanzas_net.Infrastructure.AdaptersModels.Abstrractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -23,12 +22,7 @@ public class CuentasCorrientesModels : IEntityTypeConfiguration<CuentaCorriente>
         builder.Property(p => p.Debe);
         builder.Property(p => p.Haber);
 
-        //builder
-        //    .Property(p => p.Saldo!)
-        //    .HasConversion(
-        //        v => $"{v.Debe}|{v.Haber}",
-        //        o => StandardConversions.ConvertToSaldo(o)
-        //    );
+        // Saldo (No Mapeado)
 
         builder.Property(p => p.Active);
     }
