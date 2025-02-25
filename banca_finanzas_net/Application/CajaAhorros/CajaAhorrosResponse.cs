@@ -4,7 +4,7 @@ namespace banca_finanzas_net.Application.CajaAhorros;
 
 public class CajaAhorrosResponse
 {
-    public Guid Caja_Ahorro_UUID { get; set; }
+    public string? NroCuenta { get; set; }
     public string? Movimiento { get; set; }
     public decimal Debe { get; set; }
     public decimal Haber { get; set; }

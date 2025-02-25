@@ -217,7 +217,7 @@ public class ClientesUseCase : ICRUDUsesCases
                 lstCajaAhorro.Add(
                     new CajaAhorrosResponse()
                     {
-                        Caja_Ahorro_UUID = caja.Caja_Ahorro_UUID,
+                        NroCuenta = caja.NroCuenta,
                         Movimiento = caja.Movimiento,
                         Debe = caja.Debe,
                         Haber = caja.Haber,
