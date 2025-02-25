@@ -1,5 +1,4 @@
-﻿using banca_finanzas_net.Domain.Abstractions;
-using banca_finanzas_net.Domain.Clientes;
+﻿using banca_finanzas_net.Domain.Clientes;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,8 +39,6 @@ public class PlazoFijo
             Plazo = new Plazo(Plazo!.Value);
         }
     }
-
-    //public Fecha_Vencimiento Fecha_Vencimiento { get; set; }
 
     public int Active { get; set; }
 

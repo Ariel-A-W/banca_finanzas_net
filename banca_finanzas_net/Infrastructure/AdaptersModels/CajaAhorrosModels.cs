@@ -21,12 +21,7 @@ public class CajaAhorrosModels : IEntityTypeConfiguration<CajaAhorro>
         builder.Property(p => p.Debe);
         builder.Property(p => p.Haber);
 
-        //builder
-        //    .Property(p => p.Saldo!)
-        //    .HasConversion(
-        //        v => $"{v.Debe}|{v.Haber}",   
-        //        o => StandardConversions.ConvertToSaldo(o)
-        //    );
+        // Saldo (No Mappeado)
 
         builder.Property(p => p.Fecha);
     }
